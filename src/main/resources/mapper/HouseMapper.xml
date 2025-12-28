@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuye.mapper.HouseMapper">
+    
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.wuye.entity.House">
+        <id column="id" property="id"/>
+        <result column="building_no" property="buildingNo"/>
+        <result column="unit_no" property="unitNo"/>
+        <result column="room_no" property="roomNo"/>
+        <result column="area" property="area"/>
+        <result column="house_type" property="houseType"/>
+        <result column="status" property="status"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 分页查询房屋列表 -->
+    <select id="findByPage" resultMap="BaseResultMap">
+        SELECT * FROM tb_house 
+        ORDER BY building_no, unit_no, room_no
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <!-- 查询房屋总数 -->
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*) FROM tb_house
+    </select>
+
+    <!-- 根据ID查询房屋 -->
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM tb_house WHERE id = #{id}
+    </select>
+    <select id="search" resultMap="BaseResultMap">
+        SELECT * FROM tb_house
+        <where>
+            <if test="buildingNo != null and buildingNo != ''">
+                AND building_no LIKE CONCAT('%', #{buildingNo}, '%')
+            </if>
+            <if test="unitNo != null and unitNo != ''">
+                AND unit_no LIKE CONCAT('%', #{unitNo}, '%')
+            </if>
+            <if test="roomNo != null and roomNo != ''">
+                AND room_no LIKE CONCAT('%', #{roomNo}, '%')
+            </if>
+            <if test="houseType != null and houseType != ''">
+                AND house_type = #{houseType}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY building_no, unit_no, room_no
+    </select>
+
+    <!-- 新增房屋 -->
+    <insert id="insert" parameterType="com.wuye.entity.House" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_house (building_no, unit_no, room_no, area, house_type, status, remark, create_time, update_time)
+        VALUES (#{buildingNo}, #{unitNo}, #{roomNo}, #{area}, #{houseType}, #{status}, #{remark}, NOW(), NOW())
+    </insert>
+
+    <!-- 更新房屋 -->
+    <update id="update" parameterType="com.wuye.entity.House">
+        UPDATE tb_house
+        SET building_no = #{buildingNo},
+            unit_no = #{unitNo},
+            room_no = #{roomNo},
+            area = #{area},
+            house_type = #{houseType},
+            status = #{status},
+            remark = #{remark},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除房屋 -->
+    <delete id="deleteById">
+        DELETE FROM tb_house WHERE id = #{id}
+    </delete>
+
+
+</mapper>

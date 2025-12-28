@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuye.mapper.MaintenanceMapper">
+
+    <resultMap id="MaintenanceMap" type="com.wuye.entity.Maintenance">
+        <id property="id" column="id"/>
+        <result property="deviceName" column="device_name"/>
+        <result property="deviceLocation" column="device_location"/>
+        <result property="problemDescription" column="problem_description"/>
+        <result property="repairStatus" column="repair_status"/>
+        <result property="priority" column="priority"/>
+        <result property="reporter" column="reporter"/>
+        <result property="reporterPhone" column="reporter_phone"/>
+        <result property="repairPerson" column="repair_person"/>
+        <result property="repairTime" column="repair_time"/>
+        <result property="repairCost" column="repair_cost"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="MaintenanceMap">
+        SELECT * FROM tb_maintenance WHERE id = #{id}
+    </select>
+
+    <select id="selectList" resultMap="MaintenanceMap">
+        SELECT * FROM tb_maintenance
+        <where>
+            <if test="maintenance.deviceName != null and maintenance.deviceName != ''">
+                AND device_name LIKE CONCAT('%', #{maintenance.deviceName}, '%')
+            </if>
+            <if test="maintenance.repairStatus != null and maintenance.repairStatus != ''">
+                AND repair_status = #{maintenance.repairStatus}
+            </if>
+            <if test="maintenance.priority != null and maintenance.priority != ''">
+                AND priority = #{maintenance.priority}
+            </if>
+            <if test="maintenance.reporter != null and maintenance.reporter != ''">
+                AND reporter LIKE CONCAT('%', #{maintenance.reporter}, '%')
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectListByPage" resultMap="MaintenanceMap">
+        SELECT * FROM tb_maintenance
+        <where>
+            <if test="maintenance.deviceName != null and maintenance.deviceName != ''">
+                AND device_name LIKE CONCAT('%', #{maintenance.deviceName}, '%')
+            </if>
+            <if test="maintenance.repairStatus != null and maintenance.repairStatus != ''">
+                AND repair_status = #{maintenance.repairStatus}
+            </if>
+            <if test="maintenance.priority != null and maintenance.priority != ''">
+                AND priority = #{maintenance.priority}
+            </if>
+            <if test="maintenance.reporter != null and maintenance.reporter != ''">
+                AND reporter LIKE CONCAT('%', #{maintenance.reporter}, '%')
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="selectCount" resultType="int" parameterType="com.wuye.entity.Maintenance">
+        SELECT COUNT(*) FROM tb_maintenance
+        <where>
+            <if test="maintenance.deviceName != null and maintenance.deviceName != ''">
+                AND device_name LIKE CONCAT('%', #{maintenance.deviceName}, '%')
+            </if>
+            <if test="maintenance.repairStatus != null and maintenance.repairStatus != ''">
+                AND repair_status = #{maintenance.repairStatus}
+            </if>
+            <if test="maintenance.priority != null and maintenance.priority != ''">
+                AND priority = #{maintenance.priority}
+            </if>
+            <if test="maintenance.reporter != null and maintenance.reporter != ''">
+                AND reporter LIKE CONCAT('%', #{maintenance.reporter}, '%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="com.wuye.entity.Maintenance" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_maintenance (
+            device_name,
+            device_location,
+            problem_description,
+            repair_status,
+            priority,
+            reporter,
+            reporter_phone,
+            repair_person,
+            repair_time,
+            repair_cost,
+            remark,
+            create_time,
+            update_time
+        ) VALUES (
+                     #{deviceName},
+                     #{deviceLocation},
+                     #{problemDescription},
+                     #{repairStatus},
+                     #{priority},
+                     #{reporter},
+                     #{reporterPhone},
+                     #{repairPerson},
+                     #{repairTime},
+                     #{repairCost},
+                     #{remark},
+                     NOW(),
+                     NOW()
+                 )
+    </insert>
+
+    <update id="update" parameterType="com.wuye.entity.Maintenance">
+        UPDATE tb_maintenance
+        <set>
+            <if test="deviceName != null">device_name = #{deviceName},</if>
+            <if test="deviceLocation != null">device_location = #{deviceLocation},</if>
+            <if test="problemDescription != null">problem_description = #{problemDescription},</if>
+            <if test="repairStatus != null">repair_status = #{repairStatus},</if>
+            <if test="priority != null">priority = #{priority},</if>
+            <if test="reporter != null">reporter = #{reporter},</if>
+            <if test="reporterPhone != null">reporter_phone = #{reporterPhone},</if>
+            <if test="repairPerson != null">repair_person = #{repairPerson},</if>
+            <if test="repairTime != null">repair_time = #{repairTime},</if>
+            <if test="repairCost != null">repair_cost = #{repairCost},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_time = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        DELETE FROM tb_maintenance WHERE id = #{id}
+    </delete>
+
+</mapper>
