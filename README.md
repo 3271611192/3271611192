@@ -86,7 +86,7 @@ wuyecontrol_system/
 - 未登录用户自动跳转到登录页面
 - 登录成功后信息存储在Session中
 - 排除登录页面和静态资源的拦截
-
+ 
 ## 部署说明
 
 ### 1. 数据库配置
@@ -111,12 +111,12 @@ mvn tomcat7:run
 mvn clean package
 # 将target/wuyecontrol_system.war复制到Tomcat/webapps目录
 ```
-
+ 
 ### 3. 访问系统
 - 访问地址: http://localhost:8080
 - 默认管理员账号: admin
 - 默认密码: 123456
-
+ 
 ## 界面效果
 - 采用渐变色背景,简洁柔和
 - 使用圆角设计,视觉更加友好
@@ -138,3 +138,4 @@ v1.0.0
 
 ## 许可
 MIT License
+
